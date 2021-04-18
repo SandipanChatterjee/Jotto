@@ -1,11 +1,15 @@
-import Enzyme, { shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { shallow } from "enzyme";
 import Congrats from "./Congrats";
-import { findByAttr } from "../test/testUtils";
+import { findByAttr, checkProps } from "../test/testUtils";
 
-Enzyme.configure({ adapter: new Adapter() });
+const defaultProps = {
+  success: true,
+};
 
-const setup = (props = {}) => shallow(<Congrats {...props} />);
+const setup = (props = {}) => {
+  const setupProps = { ...defaultProps, ...props };
+  return shallow(<Congrats {...setupProps} />);
+};
 
 test("renders without error", () => {
   const wrapper = setup();
@@ -23,4 +27,9 @@ test(`render congrats message when 'success' prop is true`, () => {
   const wrapper = setup({ success: true });
   const component = findByAttr(wrapper, "congrats-message").text();
   expect(component).not.toBe("0");
+});
+
+test("does not throw expected warning", () => {
+  const expectedProps = { success: true };
+  checkProps(Congrats, expectedProps);
 });
