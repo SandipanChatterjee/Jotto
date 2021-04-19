@@ -1,8 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Input = ({ secret }) => {
+const Input = ({ success, secret }) => {
   const [currentGuess, setCurrentGuess] = React.useState("");
+
+  if (success) {
+    return <div data-test="component-input" />;
+  }
+
   return (
     <div data-test="component-input">
       <form>

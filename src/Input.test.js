@@ -7,9 +7,9 @@ const defaultProps = {
   secret: "party",
 };
 
-const setup = (props = {}) => {
+const setup = (success, props = {}) => {
   const setupProps = { ...defaultProps, ...props };
-  return shallow(<Input {...setupProps} />);
+  return shallow(<Input success={success} {...setupProps} />);
 };
 
 test("does not throw warning with expected props", () => {
@@ -24,6 +24,45 @@ describe("if no secret words", () => {
   test("render without error", () => {
     const component = findByAttr(wrapper, "component-input");
     expect(component.length).toBe(1);
+  });
+});
+
+describe("render", () => {
+  describe("success is true", () => {
+    let wrapper;
+    beforeEach(() => {
+      wrapper = setup(true);
+    });
+    test("input renders without error", () => {
+      const inputComponent = findByAttr(wrapper, "component-input");
+      expect(inputComponent.length).toBe(1);
+    });
+    test("input box does not show", () => {
+      const inputBox = findByAttr(wrapper, "input-box");
+      expect(inputBox.exists()).toBe(false);
+    });
+    test("submit button does not show", () => {
+      const submitBtn = findByAttr(wrapper, "submit-button");
+      expect(submitBtn.exists()).toBe(false);
+    });
+  });
+  describe("success is false", () => {
+    let wrapper;
+    beforeEach(() => {
+      wrapper = setup(false);
+    });
+    test("input renders without error", () => {
+      const inputComponent = findByAttr(wrapper, "component-input");
+      expect(inputComponent.length).toBe(1);
+    });
+    test("input box does not show", () => {
+      const inputBox = findByAttr(wrapper, "input-box");
+      expect(inputBox.exists()).toBe(true);
+    });
+    test("submit button does not show", () => {
+      const submitBtn = findByAttr(wrapper, "submit-button");
+      expect(submitBtn.exists()).toBe(true);
+    });
   });
 });
 
