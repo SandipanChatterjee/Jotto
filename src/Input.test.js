@@ -2,6 +2,7 @@ import { shallow } from "enzyme";
 import Input from "./Input";
 import { findByAttr, checkProps } from "../test/testUtils";
 import React from "react";
+import { Provider } from "react-redux";
 
 const defaultProps = {
   secret: "party",
@@ -9,7 +10,12 @@ const defaultProps = {
 
 const setup = (success, props = {}) => {
   const setupProps = { ...defaultProps, ...props };
-  return shallow(<Input success={success} {...setupProps} />);
+  return mount(
+    <Provider store={}>
+      {" "}
+      <Input success={success} {...setupProps} />
+    </Provider>
+  );
 };
 
 test("does not throw warning with expected props", () => {
