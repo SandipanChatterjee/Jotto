@@ -1,3 +1,4 @@
+import React from "react";
 import { shallow } from "enzyme";
 import Congrats from "./Congrats";
 import { findByAttr, checkProps } from "../test/testUtils";

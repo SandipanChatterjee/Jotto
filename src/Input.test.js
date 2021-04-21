@@ -1,31 +1,26 @@
-import { shallow } from "enzyme";
-import Input from "./Input";
-import { findByAttr, checkProps } from "../test/testUtils";
 import React from "react";
+import { mount } from "enzyme";
+import Input from "./Input";
+import { findByAttr, checkProps, storeFactory } from "../test/testUtils";
 import { Provider } from "react-redux";
 
-const defaultProps = {
-  secret: "party",
-};
-
-const setup = (success, props = {}) => {
-  const setupProps = { ...defaultProps, ...props };
+const setup = (initialState = {}, secret = "party") => {
+  const store = storeFactory(initialState);
   return mount(
-    <Provider store={}>
-      {" "}
-      <Input success={success} {...setupProps} />
+    <Provider store={store}>
+      <Input secretWord={secret} />
     </Provider>
   );
 };
 
 test("does not throw warning with expected props", () => {
-  checkProps(Input, defaultProps);
+  checkProps(Input, { secretWord: "party" });
 });
 
 describe("if no secret words", () => {
   let wrapper;
   beforeEach(() => {
-    wrapper = setup();
+    wrapper = setup({ success: false });
   });
   test("render without error", () => {
     const component = findByAttr(wrapper, "component-input");
@@ -37,7 +32,7 @@ describe("render", () => {
   describe("success is true", () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = setup(true);
+      wrapper = setup({ success: true });
     });
     test("input renders without error", () => {
       const inputComponent = findByAttr(wrapper, "component-input");
@@ -55,7 +50,7 @@ describe("render", () => {
   describe("success is false", () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = setup(false);
+      wrapper = setup({ success: false });
     });
     test("input renders without error", () => {
       const inputComponent = findByAttr(wrapper, "component-input");
@@ -81,7 +76,7 @@ describe("state controlled input field", () => {
     mockCurrentGuess.mockClear();
     originalUseState = React.useState;
     React.useState = jest.fn(() => ["", mockCurrentGuess]);
-    wrapper = setup();
+    wrapper = setup({ success: false });
   });
 
   afterEach(() => {
